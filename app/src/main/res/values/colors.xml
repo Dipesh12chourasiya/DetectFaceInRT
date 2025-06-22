@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="appBg">#F5F5F5</color>
+
+    <color name="md_theme_light_primary">#3F51B5</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#212121</color>
+    <color name="md_theme_light_onSurfaceVariant">#424242</color>
+    <color name="md_theme_light_outline">#E0E0E0</color>
+
+    <color name="toolbarBg">#37B8F4</color>
 </resources>

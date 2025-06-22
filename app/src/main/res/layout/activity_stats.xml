@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/appBg"
+tools:context=".StatsActivity">
+
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="Session Report"
+        app:titleTextColor="?attr/colorOnPrimary"
+        android:background="@color/toolbarBg"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface" />
+
+</com.google.android.material.appbar.AppBarLayout>
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:id="@+id/statsContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/summaryCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="0.5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Summary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvTotalFaces"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Faces: 5"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:drawablePadding="8dp"
+                    app:drawableStartCompat="@drawable/baseline_people_24"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvAttentivePercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attentive: 80%"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:drawablePadding="8dp"
+                    app:drawableStartCompat="@drawable/baseline_check_circle_24"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvSessionDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Duration: 3m 20s"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:drawablePadding="8dp"
+                    app:drawableStartCompat="@drawable/baseline_timer_24"/>
+                <TextView
+                    android:id="@+id/tvSessionDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="date: 3m 20s"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:drawableStart="@drawable/baseline_calendar_month_24"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export Report"
+            android:layout_marginTop="24dp"
+            android:paddingVertical="12dp"
+            android:textSize="18sp"
+            app:cornerRadius="8dp"
+            app:icon="@drawable/baseline_upload_file_24"
+            app:iconGravity="textStart"
+            app:backgroundTint="@color/toolbarBg"
+            android:textColor="?attr/colorOnPrimary" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
