@@ -4,30 +4,26 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.detectfaceandexpression.databinding.ActivityStatsBinding
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.detectfaceandexpression.databinding.ActivitySessionDetailBinding
 import com.example.detectfaceandexpression.roomDB.SessionEntity
-import com.example.detectfaceandexpression.viewmodels.UserViewModel
-
-
+import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 
-
-class StatsActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityStatsBinding
-    private val viewModel: UserViewModel by viewModels()
-
+class SessionDetailActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySessionDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityStatsBinding.inflate(layoutInflater)
+        binding = ActivitySessionDetailBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
         // Toolbar back button
@@ -35,55 +31,59 @@ class StatsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val totalFaces = intent.getIntExtra("totalFaces", 0)
-        val attentiveCount = intent.getIntExtra("attentiveCount", 0)
-        val attentionPercent = intent.getIntExtra("attentionPercent", 0)
-        val sessionDuration = intent.getStringExtra("sessionDuration") ?: "0s"
-        val sessionDate = intent.getStringExtra("sessionTimestamp") ?: "N/A"
-        val totalFrames = intent.getIntExtra("totalFrames",0)
+        // Get session data from intent
+        val session = intent.getParcelableExtra<SessionEntity>("session_data")
 
-        binding.tvTotalFaces.text = "Total Faces: $totalFaces"
-        binding.tvAttentivePercent.text = "Attentive: $attentionPercent%"
-        binding.tvSessionDuration.text = "Duration: $sessionDuration"
-        binding.tvSessionDate.text = " $sessionDate"
+        session?.let {
+            binding.toolbar.title = it.title
+            binding.tvSessionDate.text = "Date: ${it.dateTime}"
+            binding.tvSessionDuration.text = "Duration: ${it.duration}"
+            binding.tvTotalFaces.text = "Total Faces: ${it.totalFaces}"
+            binding.tvTotalFrames.text = "Total Frames: ${it.totalFrames}"
+            binding.tvAttentivePercent.text = "Attentive: ${it.attentionPercent}%"
 
-        setupPieChart(attentiveCount, totalFrames - attentiveCount)
+            val inattentivePercent = 100 - it.attentionPercent
+            binding.tvInAttentivePercent.text = "Inattentive: $inattentivePercent%"
 
-        binding.btnSave.setOnClickListener {
-            val sessionName = binding.etSessionName.text.toString().trim()
-            val note = binding.etAddNote.text.toString().trim()
+            binding.tvNoteText.text = it.notes ?: "No notes added"
 
-            if (sessionName.isEmpty()) {
-                Toast.makeText(this, "Please enter session name", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            setupPieChart(it.attentiveCount, it.totalFrames - it.attentiveCount)
+
+            binding.btnShare.setOnClickListener {
+                shareSession(session)
             }
 
-            val session = SessionEntity(
-                title = sessionName,
-                dateTime = sessionDate,         // You already have this
-                duration = sessionDuration,     // Format: "3m 25s" or similar
-                attentionPercent = attentionPercent,
-                totalFaces = totalFaces,
-                totalFrames = totalFrames,
-                inattentiveCount = totalFrames - attentiveCount,
-                attentiveCount = attentiveCount,
-                maxInattentiveStreak = 0,
-                notes = if (note.isNotEmpty()) note else null
-            )
-
-            viewModel.saveSession(session)
-            binding.etSessionName.setText("")
-            binding.etAddNote.setText("")
-
-            binding.etSessionName.setText(session.title)
-
-            Toast.makeText(this, "Session saved!", Toast.LENGTH_SHORT).show()
-
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
         }
     }
 
+    private fun shareSession(session: SessionEntity) {
+
+        session?.let {
+            val shareText = """
+            📊 Session Report 📊
+            
+            📝 Title: ${it.title}
+            📅 Date: ${it.dateTime}
+            ⏱ Duration: ${it.duration}
+            
+            👥 Total Faces: ${it.totalFaces}
+            🎞 Total Frames: ${it.totalFrames}
+            ✅ Attentive: ${it.attentionPercent}%
+            ❌ Inattentive: ${100 - it.attentionPercent}%
+            
+            🗒 Notes: ${it.notes ?: "No notes"}
+        """.trimIndent()
+
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "Session Report: ${it.title}")
+                putExtra(Intent.EXTRA_TEXT, shareText)
+            }
+
+            // Launch chooser so user can select any app to share
+            startActivity(Intent.createChooser(intent, "Share session via"))
+        }
+    }
 
 
     private fun setupPieChart(attentive: Int, inattentive: Int) {
@@ -99,11 +99,15 @@ class StatsActivity : AppCompatActivity() {
         dataSet.sliceSpace = 2f // Slightly reduced slice space for a more compact look
         dataSet.selectionShift = 5f // How much a slice moves out when selected (optional, but can add interaction)
 
-
+        // Professional Color Palette (example - you can define your own in colors.xml)
+        // Using a more subdued or complementary palette often looks more professional.
+        // Example: Defining custom colors. Make sure these colors are defined in your colors.xml
         val colors = listOf(
             resources.getColor(R.color.chart_color_attentive), // e.g., #4CAF50 (Green)
             resources.getColor(R.color.chart_color_inattentive) // e.g., #F44336 (Red)
-
+            // Or a more neutral palette
+            // resources.getColor(R.color.pieChartBlue), // #2196F3
+            // resources.getColor(R.color.pieChartOrange) // #FF9800
         )
         dataSet.colors = colors
 
@@ -115,8 +119,7 @@ class StatsActivity : AppCompatActivity() {
         pieData.setValueTypeface(Typeface.DEFAULT_BOLD) // Bold values for emphasis
 
         // 4. PieChart Customization
-        val pieChart = binding.attentionPieChart
-
+        val pieChart = findViewById<PieChart>(R.id.attentionPieChart)
         pieChart.data = pieData
 
         // General Chart Settings

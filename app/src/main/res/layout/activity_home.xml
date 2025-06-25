@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeCoordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBg"
+    tools:context=".HomeActivity">
+
+    <!-- 🧭 Top Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbarBg"
+        app:title="Student Attention Tracker"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:navigationIcon="@drawable/baseline_menu_24" />
+
+    <!-- 📜 Content Layout with padding -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:clipToPadding="false">
+
+        <!-- 🔍 Recent Sessions Heading -->
+        <TextView
+            android:id="@+id/tvRecentSessions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Sessions"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 📦 Empty State (Shown when no sessions) -->
+        <TextView
+            android:id="@+id/tvEmptyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No sessions yet."
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:padding="24dp"
+            android:visibility="gone"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center" />
+
+        <!-- 📃 RecyclerView for session list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSessions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_session_card" />
+    </LinearLayout>
+
+    <!--  for new session -->
+    <com.google.android.material.button.MaterialButton
+        style="@style/ShapeAppearanceOverlay.Material3.Button"
+        android:id="@+id/fabStartSession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:text="Start Session"
+        android:textSize="16sp"
+        android:backgroundTint="@color/toolbarBg"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="15dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

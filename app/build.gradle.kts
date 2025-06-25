@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -73,4 +77,27 @@ dependencies {
     implementation ("com.google.mlkit:face-detection:16.1.7")
 
     implementation ("com.google.android.material:material:1.12.0")
+
+
+
+
+//    Dependency for pie chart
+        implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+    //room database
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+
+    implementation("androidx.room:room-ktx:$room_version")
+
+
+    //lifecycle
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 }

@@ -1,22 +1,29 @@
 package com.example.detectfaceandexpression.utils
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 object Utils {
-     fun formatDuration(millis: Long): String {
-        val seconds = (millis / 1000) % 60
-        val minutes = (millis / (1000 * 60)) % 60
-        return "${minutes}m ${seconds}s"
+    fun formatDuration(durationMillis: Long): String {
+        val seconds = (durationMillis / 1000) % 60
+        val minutes = (durationMillis / (1000 * 60)) % 60
+        val hours = (durationMillis / (1000 * 60 * 60)) % 24
+
+        if(hours > 0){
+            return "${hours}h ${minutes}m ${seconds}s"
+        }
+        if ( minutes > 0){
+            return "${minutes}m ${seconds}s"
+        }
+        return "${seconds}s"
     }
 
-//    fun formatDuration(durationMillis: Long): String {
-//        val seconds = (durationMillis / 1000) % 60
-//        val minutes = (durationMillis / (1000 * 60)) % 60
-//        val hours = (durationMillis / (1000 * 60 * 60)) % 24
-//        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
-//    }
-
     fun getCurrentDateTime(): String {
-        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", java.util.Locale.getDefault())
-        return sdf.format(java.util.Date())
+//        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd MMMM yyyy, hh:mm a", Locale.getDefault())
+
+        return sdf.format(Date())
     }
 
 
